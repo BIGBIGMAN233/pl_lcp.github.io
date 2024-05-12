@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" type="text/css" href="PL-LCP.css">
+    <style>
+        @media screen and (max-width: 800px) {
+    .leftcolumn, .rightcolumn {   
+      width: 100%;
+      padding: 0;
+    }
+  }
+   
+  /* 响应式布局 -屏幕尺寸小于 400px 时，导航等布局改为上下布局 */
+  @media screen and (max-width: 400px) {
+    .guide_a a {
+      float: none;
+      width: 100%;
+    }
+  }
+    </style>
+    <title>Weakly Supervised Learning Method for Semantic Segmentation of Large-Scale 3D Point Cloud Based on Transformers</title>
+</head>
+<body>
+  <!-- 头部导航栏 -->
+  <ul class = "HeadMenu">
+    <li class="HeadMenu_Content"><a class="LinkTo" href="#Introduction">Introduction</a></li>
+    <li class="HeadMenu_Content"><a class="LinkTo" href="#Network">Network</a></li>
+    <li class="HeadMenu_Content"><a class="LinkTo" href="#Experiments">Experiments</a></li>
+    <li class="HeadMenu_Content"><a class="LinkTo" href="#About us">About us</a></li>
+  </ul>
+
+  <!-- 占位符 -->
+  <div class = "Empty_50"></div>
+
+  <!-- 主标题以及背景图片 -->
+  <div class = "HeadPicture">
+    <div class = "HeadWord">
+      <!-- 占位符 -->
+      <div class = "Empty_50"></div>
+      Weakly Supervised Learning Method for Semantic Segmentation <br>
+      of Large-Scale 3D Point Cloud Based on Transformers
+      <!-- 占位符 -->
+      <div class = "Empty_20"></div>
+      <p class = "HeadWord">Zhaoning Zhang, Tengfei Wang , Xin Wang, Zongqian Zhan</p>
+    </div>
+  </div>
+
+  <!-- Introduction -->
+  <div class = "WhitePart">
+    <div class = "MainText_Title"><br><section id = "Introduction">Introduction</section><br></div>
+  </div>
+  <div class = "WhitePart">
+    <div class = "MainText_Content">
+      <br>
+      Semantic segmentation is a key technique to assign a semantic label to each individual point in a point cloud.
+      However, the large demand for supervised data and the difficulty of learning local features of point cloud are still unsolved problems.
+      <br><br>
+      To improve 3D point feature, inspired by the idea of transformer, we employ a so-call LCP network that extracts better feature by 
+      investigating attentions between target 3D points and its corresponding local neighbors via local context propagation. 
+      <br><br>
+      Training transformer-based network needs amount of training samples, which itself is a labor-intensive, costly and error-prone work, therefore, this work proposes 
+      a weakly supervised framework, in particular, pseudo-labels are estimated based on the feature distances between unlabeled points and prototypes, which are calculated based on labeled data.
+      <br><br>
+      The methodology and workflow of our approach are illustrated in the figure below. We begin by feeding the point cloud into an LCP network to predict the initial semantic information of the point cloud. 
+      Next, we employ a prototype pseudo-label generation strategy based on momentum to generate pseudo-labels for unlabeled points. These pseudo-labels, along with the predicted results, are optimized using a loss function. 
+      <br><br>
+      <div class="WhitePart">
+        <img src="图片1(1).png" width="500" height="390">
+      </div>
+    </div>
+  </div>
+  
+
+  <!-- Generation -->
+  <div class = "GreyPart">
+    <div class = "MainText_Title"><br><section id = "Network">Network</section><br><br></div>
+  </div>
+  <div class = "GreyPart">
+    <div class = "MainText_Content">
+      We propose an effective weakly supervised framework based on Transformer, and the overview of the framework is illustrated in the figure below.
+      Our approach combines a Transformer network with LCP (Local Context Perception) modules and pseudo-label generation techniques to achieve better 
+      semantic segmentation results with only a small amount of real annotations.
+      <br><br>
+    </div>
+  </div>
+  <div class = "GreyPart">
+    <img src="图片1.png" width = "600" height = "500">
+  </div>
+  <div class = "GreyPart">
+    <div class = "MainText_Content">
+      <br>
+      We constructed a UNet-like network for semantic segmentation tasks using 4 LCP Blocks and 4 up-sampling layers, 
+      as it requires per-point features for dense prediction. Before entering the first LCP Block, the data passes through a shared MLP.<br><br>
+
+      The dimensions of each layer in the network are 128, 256, 512, and 1024, respectively. The input consists of 40960 points. <br><br>
+    </div>
+  </div>
+
+  <!-- Experiment -->
+  <div class = "WhitePart">
+    <div class = "MainText_Title"><br><section id = "Experiments">Experiments</section><br></div>
+  </div>
+  <div class = "WhitePart">
+    <div class = "MainText_Content">
+      <br>
+      To demonstrate the efficacy of our proposed PL-LCP, we evaluate 3D semantic segmentation 
+      results on both indoor and outdoor scenarios using two large-scale point cloud datasets. 
+      First, we do two ablation experiments to validate the ability of the LCP module to integrate inter-block information and the effect of pseudo-labels.
+      Then, our method is compared with other relevant approaches, primarily to demonstrate the effectiveness of the PL-LCP network architecture. 
+      Our experimental environment is: Intel Core i7-8700 CPU (3.70GHz), 64GB RAM, NVIDIA GeForce RTX 4090 24GB GPU, 64-bit Ubuntu 22.04.3 LTS Operating System (5.4.0-149-generic). <br><br>
+      We trained the network for 200 epochs using the Adam optimizer with momentum, batch size and weight decay set to 0.9, 4 and 0.0001, respectively. 
+      The initial learning rate was set to 0.01, and decreased by a factor of 10 at 120 epochs.
+      <br>
+    </div>
+  </div>
+  <div class = "WhitePart">
+    <div class = "MainText_Content">
+      Here we show some of the algorithms which have already been tested with the corresponding results:<br><br>
+    </div>
+  </div>
+  <div class = "WhitePart">
+    <table border="1">
+      <tr>
+        <td class = "Experiments">Part</td>
+        <td class = "Experiments">LCP</td>
+        <td class = "Experiments">OA(%)</td>
+        <td class = "Experiments">mAcc(%)</td>
+        <td class = "Experiments">mIOU(%)</td>
+        <td class = "Experiments">Labels</td>
+      </tr>
+      <tr>
+        <td class = "Experiments">1</td>
+        <td class = "Experiments">√</td>
+        <td class = "Experiments">90.2</td>
+        <td class = "Experiments">74.3</td>
+        <td class = "Experiments">67.6</td>
+        <td class = "Experiments">fully</td>
+
+      </tr>
+      <tr>
+        <td class = "Experiments">2</td>
+        <td class = "Experiments">×</td>
+        <td class = "Experiments">87.6</td>
+        <td class = "Experiments">74.5</td>
+        <td class = "Experiments">64.6</td>
+        <td class = "Experiments">fully</td>
+      </tr>
+      <tr>
+        <td class = "Experiments">3</td>
+        <td class = "Experiments">√</td>
+        <td class = "Experiments">90.1</td>
+        <td class = "Experiments">74.4</td>
+        <td class = "Experiments">67.1</td>
+        <td class = "Experiments">10%</td>
+      </tr>
+      <tr>
+        <td class = "Experiments">4</td>
+        <td class = "Experiments">√</td>
+        <td class = "Experiments">89.2</td>
+        <td class = "Experiments">73.2</td>
+        <td class = "Experiments">65.9</td>
+        <td class = "Experiments">1%</td>
+      </tr>
+    </table>
+    <br><br>
+  </div>
+  <div class = "WhitePart">
+    <div class = "Empty_20"></div>
+  </div>
+  <div class = "WhitePart">
+    <table border="1">
+      <tr>
+        <td colspan="8" class = "Experiments">Performance comparisons with existing sota methods on SensatUrban test set</td>
+      </tr>
+      <tr>
+        <td class = "Experiments">Methods</td>
+        <td class = "Experiments">OA(%)</td>
+        <td class = "Experiments">mIOU(%)</td>
+        <td class = "Experiments">ground</td>
+        <td class = "Experiments">Veg.</td>
+        <td class = "Experiments">buildings</td>
+        <td class = "Experiments">walls</td>
+        <td class = "Experiments">bridge</td>
+        <td class = "Experiments">parking</td>
+        <td class = "Experiments">rail</td>
+        <td class = "Experiments">traffic</td>
+        <td class = "Experiments">street</td>
+        <td class = "Experiments">Cars</td>
+        <td class = "Experiments">path</td>
+        <td class = "Experiments">bikes</td>
+        <td class = "Experiments">water</td>
+      </tr>
+      <tr>
+        <td class = "Experiments">PointNet</td>
+        <td class = "Experiments">80.8</td>
+        <td class = "Experiments">23.7</td>
+        <td class = "Experiments">68.0</td>
+        <td class = "Experiments">89.5</td>
+        <td class = "Experiments">80.0</td>
+        <td class = "Experiments">0.0</td>
+        <td class = "Experiments">0.0</td>
+        <td class = "Experiments">4.0</td>
+        <td class = "Experiments">0.0</td>
+        <td class = "Experiments">31.6</td>
+        <td class = "Experiments">0.0</td>
+        <td class = "Experiments">35.1</td>
+        <td class = "Experiments">0.0</td>
+        <td class = "Experiments">0.0</td>
+        <td class = "Experiments">0.0</td>
+      </tr>
+      <tr>
+        <td class = "Experiments">PointNet++</td>
+        <td class = "Experiments">84.3</td>
+        <td class = "Experiments">32.9</td>
+        <td class = "Experiments">72.5</td>
+        <td class = "Experiments">94.2</td>
+        <td class = "Experiments">84.8</td>
+        <td class = "Experiments">2.7</td>
+        <td class = "Experiments">2.1</td>
+        <td class = "Experiments">25.8</td>
+        <td class = "Experiments">0.0</td>
+        <td class = "Experiments">31.5</td>
+        <td class = "Experiments">11.4</td>
+        <td class = "Experiments">38.8</td>
+        <td class = "Experiments">7.1</td>
+        <td class = "Experiments">0.0</td>
+        <td class = "Experiments">56.9</td>
+      </tr>
+      <tr>
+        <td class = "Experiments">TrangenConv</td>
+        <td class = "Experiments">77.0</td>
+        <td class = "Experiments">33.3</td>
+        <td class = "Experiments">71.5</td>
+        <td class = "Experiments">91.4</td>
+        <td class = "Experiments">75.9</td>
+        <td class = "Experiments">35.2</td>
+        <td class = "Experiments">0.0</td>
+        <td class = "Experiments">45.3</td>
+        <td class = "Experiments">0.0</td>
+        <td class = "Experiments">26.7</td>
+        <td class = "Experiments">19.2</td>
+        <td class = "Experiments">67.6</td>
+        <td class = "Experiments">0.0</td>
+        <td class = "Experiments">0.0</td>
+        <td class = "Experiments">0.0</td>
+      </tr>
+      <tr>
+        <td class = "Experiments">SPGraphr</td>
+        <td class = "Experiments">85.3</td>
+        <td class = "Experiments">37.3</td>
+        <td class = "Experiments">69.9</td>
+        <td class = "Experiments">94.6</td>
+        <td class = "Experiments">88.9</td>
+        <td class = "Experiments">32.8</td>
+        <td class = "Experiments">12.6</td>
+        <td class = "Experiments">15.8</td>
+        <td class = "Experiments">15.5</td>
+        <td class = "Experiments">30.6</td>
+        <td class = "Experiments">23.0</td>
+        <td class = "Experiments">56.4</td>
+        <td class = "Experiments">0.5</td>
+        <td class = "Experiments">0.0</td>
+        <td class = "Experiments">44.2</td>
+      </tr>
+      <tr>
+        <td class = "Experiments">SparseConv</td>
+        <td class = "Experiments">88.7</td>
+        <td class = "Experiments">42.7</td>
+        <td class = "Experiments">74.1</td>
+        <td class = "Experiments">97.9</td>
+        <td class = "Experiments">94.2</td>
+        <td class = "Experiments">63.3</td>
+        <td class = "Experiments">7.5</td>
+        <td class = "Experiments">24.2</td>
+        <td class = "Experiments">0.0</td>
+        <td class = "Experiments">30.1</td>
+        <td class = "Experiments">34.0</td>
+        <td class = "Experiments">74.4</td>
+        <td class = "Experiments">0.0</td>
+        <td class = "Experiments">0.0</td>
+        <td class = "Experiments">54.8</td>
+      </tr>
+      <tr>
+        <td class = "Experiments">KPConv</td>
+        <td class = "Experiments">93.2</td>
+        <td class = "Experiments">57.6</td>
+        <td class = "Experiments">87.1</td>
+        <td class = "Experiments">98.9</td>
+        <td class = "Experiments">95.3</td>
+        <td class = "Experiments">74.4</td>
+        <td class = "Experiments">28.7</td>
+        <td class = "Experiments">41.4</td>
+        <td class = "Experiments">0.0</td>
+        <td class = "Experiments">56.0</td>
+        <td class = "Experiments">54.4</td>
+        <td class = "Experiments">85.7</td>
+        <td class = "Experiments">40.4</td>
+        <td class = "Experiments">0.0</td>
+        <td class = "Experiments">86.3</td>
+      </tr>
+      <tr>
+        <td class = "Experiments">RandLA-Net</td>
+        <td class = "Experiments">89.8</td>
+        <td class = "Experiments">52.7</td>
+        <td class = "Experiments">80.1</td>
+        <td class = "Experiments">98.1</td>
+        <td class = "Experiments">91.6</td>
+        <td class = "Experiments">48.9</td>
+        <td class = "Experiments">40.8</td>
+        <td class = "Experiments">51.6</td>
+        <td class = "Experiments">0.0</td>
+        <td class = "Experiments">56.7</td>
+        <td class = "Experiments">33.2</td>
+        <td class = "Experiments">80.1</td>
+        <td class = "Experiments">32.6</td>
+        <td class = "Experiments">0.0</td>
+        <td class = "Experiments">71.3</td>
+      </tr>
+      <tr>
+        <td class = "Experiments">PL-LCP(ours)</td>
+        <td class = "Experiments">93.9</td>
+        <td class = "Experiments">67.3</td>
+        <td class = "Experiments">83.5</td>
+        <td class = "Experiments">98.7</td>
+        <td class = "Experiments">96.3</td>
+        <td class = "Experiments">72.3</td>
+        <td class = "Experiments">84.2</td>
+        <td class = "Experiments">57.0</td>
+        <td class = "Experiments">46.9</td>
+        <td class = "Experiments">74.5</td>
+        <td class = "Experiments">54.9</td>
+        <td class = "Experiments">90.1</td>
+        <td class = "Experiments">43.5</td>
+        <td class = "Experiments">0.0</td>
+        <td class = "Experiments">72.8</td>
+      </tr>
+    </table>
+  </div>
+  <div class = "WhitePart">
+    <div class = "Empty_20"></div>
+  </div>
+  <div class = "WhitePart">
+    <table border="1">
+      <tr>
+        <td colspan="8" class = "Experiments">Performance comparisons with previous methods on S3DIS</td>
+      </tr>
+      <tr>
+        <td class = "Experiments"></td>
+        <td class = "Experiments">OA(%)</td>
+        <td class = "Experiments">mAcc(%)</td>
+        <td class = "Experiments">mIOU(%)</td>
+      </tr>
+      <tr>
+        <td class = "Experiments">PointNet</td>
+        <td class = "Experiments">-</td>
+        <td class = "Experiments">23.7</td>
+        <td class = "Experiments">41.1</td>
+      </tr>
+      <tr>
+        <td class = "Experiments">TragenConv</td>
+        <td class = "Experiments">82.5</td>
+        <td class = "Experiments">63.2</td>
+        <td class = "Experiments">52.8</td>
+      </tr>
+      <tr>
+        <td class = "Experiments">SPGraph</td>
+        <td class = "Experiments">86.4</td>
+        <td class = "Experiments">66.5</td>
+        <td class = "Experiments">58.0</td>
+      </tr>
+      <tr>
+        <td class = "Experiments">LocalTransformer</td>
+        <td class = "Experiments">87.6</td>
+        <td class = "Experiments">71.9</td>
+        <td class = "Experiments">64.1</td>
+      </tr>
+      <tr>
+        <td class = "Experiments">RandLA-Net</td>
+        <td class = "Experiments">87.2</td>
+        <td class = "Experiments">71.4</td>
+        <td class = "Experiments">62.4</td>
+      </tr>
+      <tr>
+        <td class = "Experiments">PSNet</td>
+        <td class = "Experiments">87.8</td>
+        <td class = "Experiments">-</td>
+        <td class = "Experiments">64.9</td>
+      </tr>
+      <tr>
+        <td class = "Experiments">PL-LCP(ours)</td>
+        <td class = "Experiments">90.2</td>
+        <td class = "Experiments">74.3</td>
+        <td class = "Experiments">67.6</td>
+      </tr>
+    </table>
+  </div>
+  <div class = "WhitePart">
+    <div class = "Empty_20"></div>
+  </div>
+  <div class = "WhitePart">
+    <div class = "MainText_Content">
+      If you want to show your test result here, please send your e-mail to the following e-mail address:
+      <ul>
+        <li>2020114062@my.swjtu.edu.cn, ZhaoNing Zhang, Southwest Jiao Tong University</li>
+        <li>tf.wang@whu.edu.cn, TengFei Wang, WuHan University</li>
+        <li>xwang@sgg.whu.edu.cn, Xin Wang, WuHan University</li>
+      </ul>
+      Thanks for your support!<br><br>
+    </div>
+  </div>
+
+  <!-- About us -->
+  <div class = "GreyPart">
+    <div class = "MainText_Title"><br><section id = "About us">About us</section><br></div>
+  </div>
+  <div class = "GreyPart">
+    <div class = "MainText_Content">
+      If you have any questions or advice, you can contact us through following address:
+      <ul>
+        <li>2020114062@my.swjtu.edu.cn, ZhaoNing Zhang, Southwest Jiao Tong University</li>
+        <li>tf.wang@whu.edu.cn, TengFei Wang, WuHan University</li>
+        <li>xwang@sgg.whu.edu.cn, Xin Wang, WuHan University</li>
+      </ul>
+   
+      This work was jointly supported Natural Science Foundation of Hubei Province，China (2022CFB727) and National Natural Science Foundation of China (42301507).
+    </div>
+  </div>
+  <div class = "GreyPart">
+    <div class = "Empty_50"></div>
+  </div>
+</body>
+</html>
